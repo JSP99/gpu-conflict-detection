@@ -20,8 +20,6 @@ __global__ void detconflictKernel
         const int numb_sections
 )
 {
-        uint3 bid = blockIdx; // ID of the block
-
         // 1D grid and 1D blocks
         auto threadsPerBlock = blockDim.x; // Number of threads per block
         auto l = threadIdx.x; // Local thread number in the block
@@ -41,9 +39,6 @@ __global__ void detconflictKernel
         int2 conflict;
         conflict.x = -1;
         conflict.y = -1;
-
-        int numb_directions = sizeof(int) * numb_trains;
-        int numb_section_attr = sizeof(sec_attribs) * numb_sections;
 
         /* Allow only certain threads in a block to copy the section attributes and
          * train directions to the shared memory of the block.
@@ -70,9 +65,6 @@ __global__ void detconflictKernel
 
         const int track1 = sh_concat_tracklists[l].trackid;
         const int track2 = sh_concat_tracklists[l + 1].trackid;
-
-        const int firstevent = sh_concat_tracklists[l].eventid;
-        const int nextevent = sh_concat_tracklists[l + 1].eventid;
 
         const int firsttrain = sh_concat_tracklists[l].trainid;
         const int nexttrain = sh_concat_tracklists[l + 1].trainid;
